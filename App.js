@@ -1,20 +1,32 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';        
+import RootNavigation from './navigation';
+import { AlertNotificationRoot, Toast } from 'react-native-alert-notification';
+import { COLORS } from './constants/theme';
+const IColors = {
+  label: COLORS.white,
+  card: COLORS.primary,
+  overlay: 'rgba(0, 0, 0, 0.5)',
+  success: COLORS.green,
+  danger: COLORS.rose,
+  warning: COLORS.gold,
+};
+const defaultProps = {
+  dialogConfig: {},
+  toastConfig: {},
+  theme: 'dark',
+  colors: [IColors, IColors],
+};
 
-export default function App() {
+const App = ({ dialogConfig, toastConfig, theme, colors }) => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <AlertNotificationRoot dialogConfig={dialogConfig ?? defaultProps.dialogConfig} toastConfig={toastConfig ?? defaultProps.toastConfig} theme={theme ?? defaultProps.theme} colors={colors ?? defaultProps.colors}>
+      <RootNavigation />
+    </AlertNotificationRoot>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+App.defaultProps = defaultProps;
+
+export default App;
+
+
