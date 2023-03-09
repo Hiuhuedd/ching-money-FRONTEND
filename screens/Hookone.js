@@ -89,7 +89,7 @@ const Hookone= ({navigation}) =>{
               </TouchableOpacity>
                 <ViewAtom fd="column" jc="center" ai="center" w="100%" pv={0} ph={20} bg="transparent" br={0} mv={0} mh={0}>
                                 
-                  <Image source={require('../assets/3.png')} style={styles.deliveryIcon} />
+                  <Image source={require('../assets/10.png')} style={styles.deliveryIcon} />
 
                     <ViewAtom jc="center" ai="center" w="100%" pv={10} ph={0} bg="transparent" br={0} mv={0} mh={0}>
                  

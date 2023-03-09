@@ -84,13 +84,13 @@ const Hook= ({navigation}) =>{
 
              
                 <ViewAtom fd="column" jc="flex-start" ai="flex-start" w="100%" pv={0} ph={20} bg="transparent" br={0} mv={0} mh={0}>
-                                
+                <Image source={require('../assets/10.png')} style={styles.deliveryIcon} />
                
                     <ViewAtom jc="center" ai="center" w="100%" pv={10} ph={0} bg="transparent" br={0} mv={0} mh={0}>
                  
-                    <TextAtom text="Now that your goals are set up, Let's proceed to establish your financial zone." c={COLORS.black} f="Poppins" s={SIZES.h5} w="500"/>
+                    <TextAtom ta="center" text="Now that your goals are set up, Let's proceed to establish your financial zone." c={COLORS.black} f="Poppins" s={SIZES.h5} w="500"/>
                     <TextAtom text='"You cannot really know where you are going,
-until you know your current reality!"' c={COLORS.gray2} f="Poppins" s={SIZES.h5} w="500"/>
+until you know your current reality!"' ta="center" c={COLORS.gray2} f="Poppins" s={SIZES.h5} w="500"/>
                     
                     </ViewAtom>
 
@@ -120,6 +120,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 10,
     width:"100%"
+    },
+    deliveryIcon:{
+        width:"100%",
+        height: "50%",
+        // marginTop:"45%",
+     
     },
   });
   

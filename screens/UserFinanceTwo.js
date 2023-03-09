@@ -113,11 +113,11 @@ const UserFinanceTwo= ({navigation}) =>{
                   if (!loaded) {
                     return <AppLoading/>
                   }
-             
+                  const HEIGHT=Dimensions.get("screen").height
             return(
             <View style={{backgroundColor:COLORS.white, height:"100%",paddingTop:20}}  >
 
-                <ViewAtom fd="column" jc="flex-start" ai="flex-start" w="100%" pv={20} ph={20} bg="transparent" br={0} mv={0} mh={0}>
+                <ViewAtom fd="column" jc="flex-start" ai="flex-start" w="100%" pv={10} ph={20} bg="transparent" br={0} mv={0} mh={0}>
                 <ViewAtom fd="row" jc="flex-start" ai="center" w="70%" bg="transparent"  pv={10}br={0} mv={0} mh={0}
                
                 >
@@ -132,16 +132,16 @@ const UserFinanceTwo= ({navigation}) =>{
                                 
                                
                 </ViewAtom>
-                <ViewAtom fd="column" jc="flex-start" ai="flex-start" w="100%" pv={10} ph={20} bg="transparent" br={0} mv={0} mh={0}>
+                <ViewAtom fd="column" jc="flex-start" ai="flex-start" w="100%" pv={0} ph={20} bg="transparent" br={0} mv={0} mh={0}>
                                 
-               
+                <ScrollView style={{height:HEIGHT-170,width:"100%",}} showsVerticalScrollIndicator={false} >
 
                     <TextAtom text="Specify Your Goal Amount" c={COLORS.black} f="Poppins" s={SIZES.h3} w="500"/>
-                    <ViewAtom fd="column" jc="space-between" ai="center" w="100%" pv={15} ph={5} bg="transparent" br={0} mv={0} mh={0}>
+                    <ViewAtom fd="column" jc="space-between" ai="center" w="100%" pv={10} ph={5} bg="transparent" br={0} mv={0} mh={0}>
                       {goalValues.map((goalValue,index)=>{
                       
                         return(
-                          <ViewAtom fd="column" jc="space-between"  w="100%" pv={15} ph={5} bg="transparent" br={0} mv={0} mh={0} key={goalValue.goal}>
+                          <ViewAtom fd="column" jc="space-between"  w="100%" pv={10} ph={5} bg="transparent" br={0} mv={0} mh={0} key={goalValue.goal}>
                             <TextAtom text={goalValue.goal} c={COLORS.black} f="Poppins" s={SIZES.h3} w="500"/>
                             <MyInput editable={true} keyboardType="numeric" secureTextEntry={false} style={styles.input} placeholder={`Your ${goalValue.goal} amount`} maxLength={40} setisUpdated={handleSetAmount} index={index} />
 
@@ -150,13 +150,13 @@ const UserFinanceTwo= ({navigation}) =>{
                       })}
                         
                     </ViewAtom>
-                   
-
-
-                    <ViewAtom  ai="center" w="100%" pv={30} ph={0} bg="transparent" br={0} mv={0} mh={0}>
+                    <ViewAtom  ai="center" w="100%" pv={10} ph={0} bg="transparent" br={0} mv={0} mh={0}>
                     <Button text={"Next"}width="100%"bg={COLORS.primary}  borderRadius={7} screen="BookingTwo"  onMethodSelected={onMethodSelected}/>
                        
                     </ViewAtom>
+                   </ScrollView>
+
+
 
 
 
@@ -173,12 +173,12 @@ export default UserFinanceTwo
  
 const styles = StyleSheet.create({
   input: {
-    height: 50,
+    height: 45,
     borderWidth: 1,
     borderColor: COLORS.primary,
     borderRadius: 5,
     paddingHorizontal: 10,
-    marginBottom: 20,
+    marginBottom: 10,
     width:"100%"
     },
   });

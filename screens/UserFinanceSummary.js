@@ -86,7 +86,7 @@ const UserFinanceSummary= ({navigation}) =>{
                   if (!loaded) {
                     return <AppLoading/>
                   }
-             
+                  const HEIGHT=Dimensions.get("screen").height
             return(
             <View style={{backgroundColor:COLORS.white, height:"100%",paddingTop:20}}  >
 
@@ -102,9 +102,8 @@ const UserFinanceSummary= ({navigation}) =>{
                 </ViewAtom>
 
                                 <TextAtom text="Summary" c={COLORS.primary} f="Poppins" s={SIZES.h5} w="500"/>
-                                
-                               
                 </ViewAtom>
+                                <ScrollView style={{height:HEIGHT-170,width:"100%",}} showsVerticalScrollIndicator={false} >
                 <ViewAtom fd="column" jc="flex-start" ai="flex-start" w="100%" pv={10} ph={20} bg="transparent" br={0} mv={0} mh={0}>
                                 
                {goals.map((goal,index)=>{
@@ -135,6 +134,8 @@ const UserFinanceSummary= ({navigation}) =>{
 
 
                 </ViewAtom>
+                                    </ScrollView>  
+                               
                 {/* <Appointments/> */}
                
              {/* <View style={{position:"absolute", width:"100%",bottom:0, backgroundColor:COLORS.gray }}>

@@ -15,7 +15,7 @@ AsyncStorage.getItem('onboardingComplete').then(value => {
           setloader(true)
           setTimeout(() =>{
               navigation.navigate('Onboarding')
-              // navigation.navigate("PremiumScreen")
+              // navigation.navigate("FZone")
           }, 3000)
           
         }else{

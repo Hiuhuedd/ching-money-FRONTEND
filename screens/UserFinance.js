@@ -1,7 +1,7 @@
 import React ,{useState,useEffect}from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions,Image ,ImageBackground, Platform,TextInput,BackHandler,Switch } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions,BackHandler,Switch,  } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
-import { Divider } from "react-native-elements";
+import { CheckBox, Divider } from "react-native-elements";
 import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
 import { Button } from '../components/Atoms/Button';
@@ -12,10 +12,12 @@ import EcareServices from '../components/Molecules/EcareServices';
 import Appointments from '../components/Molecules/Appointments';
 import ViewAtom from '../components/Atoms/ViewAtom';
 import TextAtom from '../components/Atoms/TextAtom';
-import { RadioButton } from 'react-native-paper';
+import {  RadioButton } from 'react-native-paper';
 import MedicalSpecialistDropdown from '../components/Molecules/MedicalSpecialistDropdown';
 import { useDispatch } from 'react-redux';
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
+import Goals from '../components/Molecules/Goals';
+import { CustomerGoals } from '../constants/content/CustomerGoals';
 
 const {COLORS, SIZES, FONTS}=appTheme
 console.disableYellowBox = true;
@@ -25,7 +27,7 @@ const UserFinance= ({navigation}) =>{
     //==============================Backpress============================
     const handleBackPress=()=>{
         
-        navigation.navigate("Home") 
+        navigation.navigate("Hookone") 
         return true
     
     }
@@ -44,14 +46,25 @@ const UserFinance= ({navigation}) =>{
 
      
                 //==============================PAGE STATE============================
-        const [GoalsArray, setGoalsArray] = useState([]);
-        const [Savings, setIsSavings] = React.useState(false);
-        const [Debt, setIsDebt] = React.useState(false);
-        const [Item, setIsItem] = React.useState(false);
+        const [currentGoal, setCurrentGoal] = useState(0);
+        
+
        
      
       
 
+        const [selectedOptions, setSelectedOptions] = useState([]);
+        const [tik, settik] = useState(false);
+
+        const handleOptionChange = (option, isChecked) => {
+          if (isChecked) {
+            settik(true)     
+            setSelectedOptions([...selectedOptions, option]);
+          } else {
+            settik(false)
+            setSelectedOptions(selectedOptions.filter((selectedOption) => selectedOption !== option));
+          }
+        };
 
         const showAlert = (type, title, msg) => {
           Toast.show({
@@ -62,14 +75,17 @@ const UserFinance= ({navigation}) =>{
         };
         
         const onMethodSelected = (method) => {
-          if (GoalsArray.length < 1) {
+          if (selectedOptions.length < 1) {
             showAlert(ALERT_TYPE.WARNING, "Oops!", "You'll need to specify at least one goal first");
           }else{
             navigation.navigate("UserFinanceTwo")
-            console.log(GoalsArray);
+            console.log(selectedOptions);
+            const filteredArr = selectedOptions.filter((str, index) => {
+                return selectedOptions.indexOf(str) === index;
+              });
             dispatch({
                 type: "SELECT_CONSULTATION_METHOD",
-                payload:GoalsArray,
+                payload:filteredArr,
               });
           }
         };
@@ -78,46 +94,8 @@ const UserFinance= ({navigation}) =>{
           
           //==============================PAGE DISPATCH============================
           const dispatch = useDispatch();
-         
-          const handleToggle = (Value,data) => {
-            
-            if(data==="Debt Settlement"){
-                if(Value){        
-                    setGoalsArray([...GoalsArray, data]);
-                    setIsDebt(Value);
-                }else{
-                    setGoalsArray(GoalsArray.filter((element) => element !== data));
-                    setIsDebt(Value);
-                }
-            }
-            if(data==="Savings"){
-                if(Value){        
-                    setGoalsArray([...GoalsArray, data]);
-                    setIsSavings(Value);
-                }else{
-                    setGoalsArray(GoalsArray.filter((element) => element !== data));
-                    setIsSavings(Value);
-                }
-            }
-            if(data==="Item Aquisition"){
-                if(Value){        
-                    setGoalsArray([...GoalsArray, data]);
-                    setIsItem(Value);
-                }else{
-                    setGoalsArray(GoalsArray.filter((element) => element !== data));
-                    setIsItem(Value);
-                }
-            }
-          }
-        // useEffect(() => {
-        //     console.log(GoalsArray);
-        //     dispatch({
-        //         type: "SELECT_CONSULTATION_METHOD",
-        //         payload:GoalsArray,
-        //       });
         
-        // }, [Savings,Debt,Item])
-        
+   
               
               //==============================PAGE FONTS============================
 
@@ -130,7 +108,11 @@ const UserFinance= ({navigation}) =>{
                   if (!loaded) {
                     return <AppLoading/>
                   }
-             
+
+
+
+             const goalsList=CustomerGoals[currentGoal].goal
+             const HEIGHT=Dimensions.get("screen").height
             return(
             <View style={{backgroundColor:COLORS.white, height:"100%",paddingTop:20}}>
 
@@ -146,71 +128,56 @@ const UserFinance= ({navigation}) =>{
                 </ViewAtom>
 
                                 <TextAtom text="Step 1/3" c={COLORS.primary} f="Poppins" s={SIZES.h5} w="500"/>
+                                <TextAtom text="Specify your goals" c={COLORS.black} f="Poppins" s={SIZES.h5} w="500"/>
                                 
                                
                 </ViewAtom>
-                <ViewAtom fd="column" jc="flex-start" ai="flex-start" w="100%" pv={10} ph={20} bg="transparent" br={0} mv={0} mh={0}>
-                                
-               
+                <ViewAtom fd="column" jc="flex-start" ai="flex-start" w="100%" pv={5} ph={0} bg="transparent" br={0} mv={0} mh={0}>
+                      <ScrollView style={{height:HEIGHT-100}}>
+                        
+                <Goals setCurrentGoal={setCurrentGoal} currentGoal={currentGoal} GoalsArray={CustomerGoals}/>
 
-                    <TextAtom text="Specify Your Goals" c={COLORS.black} f="Poppins" s={SIZES.h3} w="500"/>
-                    <ViewAtom fd="row" jc="space-between" ai="center" w="100%" pv={15} ph={5} bg="transparent" br={0} mv={0} mh={0}>
-                        <ViewAtom fd="row"  ai="center" w="33%" pv={0} ph={0} bg="transparent" br={0} mv={0} mh={0}>
-                            <ViewAtom fd="row" jc="space-between" ai="flex-start"   pv={15} ph={15} bg={COLORS.primary}  br={50}  mv={0} mh={5} >
-                                <Feather name="briefcase" size={SIZES.h4}   color={COLORS.white}/>
-                            </ViewAtom>
-                            <TextAtom text="  Savings" c={COLORS.black} f="Poppins" s={SIZES.h5} w="500"/>
+                  
+                <ViewAtom jc="flex-start" ai="flex-start"  bg="transparent"  pv={3} ph={20} br={0} mv={0} mh={0}>
+             {
 
-                        </ViewAtom>
+            goalsList.map(option=>{
+                return(
+                    <TouchableOpacity key={option} onPress={() => handleOptionChange(option,!tik )}>
+         <ViewAtom fd="row" jc="flex-start" ai="center" w="100%" bg="transparent"  pv={1}br={0} mv={0} mh={0} > 
+                    <CheckBox
+                    onPress={(isChecked) => handleOptionChange(option, isChecked)}
+                    center
+                    iconRight
+                    iconType='material'
+                    checkedIcon='check'
+                    uncheckedIcon='add'
+                    checkedColor={COLORS.primary}
+                    checked={selectedOptions.includes(option)}
+                    />
+             
+                { !tik?   <TextAtom text={option} c={COLORS.gray2} f="Poppins" s={ SIZES.h5} w="500"/>:<TextAtom text={option} c={COLORS.primary} f="Poppins" s={ SIZES.h5} w="500"/>
+                }
 
-                        <Switch
-                        value={Savings}
-                        onValueChange={(newValue) => handleToggle(newValue, "Savings")}
-                            trackColor={{ false: '#767577', true:COLORS.primary }}
-                            thumbColor={Savings ? COLORS.white : '#f4f3f4'}
-                            ios_backgroundColor="#3e3e3e"
-                            />
-                    </ViewAtom>
-                    <ViewAtom fd="row" jc="space-between" ai="center" w="100%" pv={15} ph={5} bg="transparent" br={0} mv={0} mh={0}>
-                        <ViewAtom fd="row"  ai="center" w="35%" pv={0} ph={0} bg="transparent" br={0} mv={0} mh={0}>
-                            <ViewAtom fd="row" jc="space-between" ai="flex-start"   pv={15} ph={15} bg={COLORS.primary}  br={50}  mv={0} mh={5} >
-                                <Feather name="rotate-ccw" size={SIZES.h4}   color={COLORS.white}/>
-                            </ViewAtom>
-                            <TextAtom text="  Debt settlement" c={COLORS.black} f="Poppins" s={SIZES.h5} w="500"/>
+               </ViewAtom>
+                  </TouchableOpacity>
 
-                        </ViewAtom>
-                        <Switch
-                        value={Debt}
-                        onValueChange={(newValue) => handleToggle(newValue, "Debt Settlement")}
-                            trackColor={{ false: '#767577', true:COLORS.primary }}
-                            thumbColor={Debt ? COLORS.white : '#f4f3f4'}
-                            ios_backgroundColor="#3e3e3e"
-                            />
-                    </ViewAtom>
-                    <ViewAtom fd="row" jc="space-between" ai="center" w="100%" pv={15} ph={5} bg="transparent" br={0} mv={0} mh={0}>
-                        <ViewAtom fd="row"  ai="center" w="33%" pv={0} ph={0} bg="transparent" br={0} mv={0} mh={0}>
-                            <ViewAtom fd="row" jc="space-between" ai="flex-start"   pv={15} ph={15} bg={COLORS.primary}  br={50}  mv={0} mh={5} >
-                                <Feather name="unlock" size={SIZES.h4}   color={COLORS.white}/>
-                            </ViewAtom>
-                            <TextAtom text="  Item aquisition" c={COLORS.black} f="Poppins" s={SIZES.h5} w="500"/>
+                )
 
-                        </ViewAtom>
-                        <Switch
-                            value={Item}
-                            onValueChange={(newValue) => handleToggle(newValue, "Item Aquisition")}
-                            trackColor={{ false: '#767577', true:COLORS.primary }}
-                            thumbColor={Item ? COLORS.white : '#f4f3f4'}
-                            ios_backgroundColor="#3e3e3e"
-                            />
-                    </ViewAtom>
+                })
+             }
+               </ViewAtom>
 
+             <View style={{alignSelf:"auto"}} >
 
-                    <ViewAtom  ai="center" w="100%" pv={30} ph={0} bg="transparent" br={0} mv={0} mh={0}>
+                    <ViewAtom  ai="center" w="100%" pv={30} ph={20} bg="transparent" br={0} mv={0} mh={0}>
                     <Button text={"Next"}width="100%"bg={COLORS.primary}  borderRadius={7}   onMethodSelected={onMethodSelected}/>
                        
                     </ViewAtom>
+             </View>
 
 
+                        </ScrollView>          
 
                 </ViewAtom>
                 {/* <Appointments/> */}
