@@ -1,30 +1,35 @@
+import moment from 'moment';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import DatePicker from 'react-native-datepicker-expo';
 import { COLORS, SIZES } from '../../constants/theme';
 import TextAtom from '../Atoms/TextAtom';
 
-const MyCalendar = ({ label, date, handleSetDate, }) => {
+const MyCalendar = ({ label, index, handleSetDate, }) => {
   const [focused, setFocused] = useState(true);
+  const [selectedDate, setselectedDate] = useState(new Date());
 
   const onFocusChange = () => {
     setFocused(!focused);
   };
-
+const handleSetSelectedDate=(d)=>{
+  handleSetDate(d,index)
+  setselectedDate(d)
+}
   return (
     <View style={styles.container}>
        {/* <TextAtom text={label} c={COLORS.primary} f="Poppins" s={SIZES.h5} w="500"/> */}
       <DatePicker
         style={styles.datePicker}
-        date={new Date()}
+        date={moment(new Date()).format('MMMM D, YYYY')}
         mode="date"
         placeholder="Select date"
-        format="YYYY-MM-DD"
-        minDate="1900-01-01"
-        maxDate="2100-01-01"
+        format="MMMM D, YYYY"
+        minDate={`${moment(new Date()).format('MMMM D, YYYY')}`}
+        maxDate="January 2, 2100"
         confirmBtnText="Confirm"
         cancelBtnText="Cancel"
-        onDateChange={handleSetDate}
+        onDateChange={(date)=>handleSetSelectedDate(date)}
         showIcon={false}
         customStyles={{
           dateInput: {
@@ -33,12 +38,13 @@ const MyCalendar = ({ label, date, handleSetDate, }) => {
             borderColor: focused ? '#fff' : '#fff',
             alignItems: 'flex-start',
             padding: 0,
+
           },
           placeholderText: {
-            color: '#CCCCCC',
+            color: '#111',
           },
           dateText: {
-            fontSize: 14,
+            fontSize: 10,
             color:COLORS.primary
           },
         }}
@@ -51,14 +57,19 @@ const MyCalendar = ({ label, date, handleSetDate, }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 10,
+    marginBottom: 4,
   },
   label: {
     fontWeight: 'bold',
-    marginBottom: 5,
+    // marginBottom: 5,
   },
   datePicker: {
-    width: '100%',
+    maxWidth:90,
+    alignSelf: 'flex-start',
+    padding:0,
+  
+// backgroundColor:"#111"
+
   },
 });
 

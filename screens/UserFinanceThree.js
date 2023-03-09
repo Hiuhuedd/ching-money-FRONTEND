@@ -19,6 +19,7 @@ import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-a
 import MyInput from '../components/Atoms/MyInput';
 import MyCalendar from '../components/Molecules/MyCalendar';
 
+
 const {COLORS, SIZES, FONTS}=appTheme
 console.disableYellowBox = true;
 
@@ -26,8 +27,8 @@ const UserFinanceThree= ({navigation}) =>{
     const goals = useSelector(state => state.bookingReducer.ConsultationMethod2);
 
     const [dates, setDates] = useState([]);
-    const [showDatePicker, setShowDatePicker] = useState(false);
-    const [selectedDateIndex, setSelectedDateIndex] = useState(0);
+  
+ 
   
     //==============================Backpress============================
     const handleBackPress=()=>{
@@ -94,13 +95,15 @@ const UserFinanceThree= ({navigation}) =>{
 
         
     };
-    const handleSetDate = (selectedDate) => {
-
-        const newDates = [...dates];
-        newDates[selectedDateIndex] = selectedDate;
-        setDates(newDates);
-        setShowDatePicker(false);
-        updateGoalsArray(newDates);
+    const handleSetDate = (selectedDate,i) => {
+     
+  setTimeout(() => {      
+    
+    const newDates = [...dates];
+    newDates[i] = selectedDate;
+    setDates(newDates);
+    updateGoalsArray(newDates);
+  }, 100);
     };
     
     const updateGoalsArray = (newDates) => {
@@ -132,6 +135,7 @@ const UserFinanceThree= ({navigation}) =>{
                     return <AppLoading/>
                   }
              
+                  const HEIGHT=Dimensions.get("screen").height
             return(
             <View style={{backgroundColor:COLORS.white, height:"100%",paddingTop:20}}  >
 
@@ -152,7 +156,7 @@ const UserFinanceThree= ({navigation}) =>{
                 </ViewAtom>
                 <ViewAtom fd="column" jc="flex-start" ai="flex-start" w="100%" pv={10} ph={20} bg="transparent" br={0} mv={0} mh={0}>
                                 
-               
+                <ScrollView style={{height:HEIGHT-170,width:"100%",}} showsVerticalScrollIndicator={false} >
 
                     <TextAtom text="Specify Your Goal Date" c={COLORS.black} f="Poppins" s={SIZES.h3} w="500"/>
                     <ViewAtom fd="column" jc="space-between" ai="center" w="100%" pv={15} ph={5} bg="transparent" br={0} mv={0} mh={0}>
@@ -162,25 +166,43 @@ const UserFinanceThree= ({navigation}) =>{
                           <ViewAtom fd="column" jc="space-between"  w="100%" pv={15} ph={5} bg="transparent" br={0} mv={0} mh={0} key={index}>
                <TextAtom text={goal.goal} c={COLORS.black} f="Poppins" s={SIZES.h3} w="500"/>
                     <TouchableOpacity  onPress={() => {
-                                setSelectedDateIndex(index);
-                                setShowDatePicker(true);
+                                // setSelectedDateIndex(index);
+                                // setShowDatePicker(true);
                              
                               
                                 }}>
                           <ViewAtom fd="row" jc="space-between" ai='center'  w="35%" pv={0} ph={5} >
-                        <Feather name="calendar" size={SIZES.h4}     color={COLORS.primary}  />
+                        <Feather name="calendar" size={SIZES.h4}     color={COLORS.gray2}  />
 
-                            <TextAtom text="  Select a date" c={COLORS.primary} f="Poppins" s={SIZES.h5} w="500"/>
+                            <TextAtom text="  Select a date" c={COLORS.gray2} f="Poppins" s={SIZES.h5} w="500"/>
                       
                            
                             </ViewAtom>
                             </TouchableOpacity>
                          
                           
-                          {(showDatePicker&&selectedDateIndex===index)&&(
-                              <MyCalendar handleSetDate={handleSetDate} label="Select a date" />
-                
-                            )}
+                     
+                            <ViewAtom fd="row" jc="space-between" ai='center'  w="100%" pv={0} ph={0} >
+                            <MyCalendar handleSetDate={handleSetDate} label="Select a date" index={index}  />
+                            { 
+                          
+                        
+                            
+                            (dates[index])&&
+                                <>
+                            <ViewAtom fd="column"  w={"20%"} ai='center' pv={0} ph={0}  mv={0} >
+                            <Divider style={{ backgroundColor:COLORS.gray2,width:"100%",marginTop:10 }} />
+
+                        <TextAtom text={`${((new Date().getFullYear() - new Date(dates[index]).getFullYear()) * 12 + (new Date().getMonth() - new Date(dates[index]).getMonth()))*-1} months`} c={COLORS.gray2} f="Poppins" s={SIZES.base} w="500"/>
+                            </ViewAtom>
+                            <View style={{maxWidth:90,}}>
+
+                        <TextAtom text={dates[index]} c={COLORS.gray2} f="Poppins" s={10} w="500"/>
+                            </View>
+                                </>
+                            }
+                           
+                            </ViewAtom>
 
                           </ViewAtom>
                         )
@@ -194,6 +216,8 @@ const UserFinanceThree= ({navigation}) =>{
                     <Button text={"Next"}width="100%"bg={COLORS.primary}  borderRadius={7} screen="BookingTwo"  onMethodSelected={onMethodSelected}/>
                        
                     </ViewAtom>
+                </ScrollView>
+
 
 
 
